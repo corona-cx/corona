@@ -11,7 +11,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class ResultSource
 {
-    const KEY = 'corona_result';
+    const KEY_PREFIX = 'corona_result';
     const NAMESPACE = 'criticalmass_corona';
     const TTL = 60 * 60;
 
@@ -26,7 +26,9 @@ class ResultSource
 
     public function getResultForCoordinate(Coordinate $target): Result
     {
-        return $this->adapter->get(self::KEY, function() use ($target) {
+        $key = sprintf('%s_%f_%f', self::KEY_PREFIX, $target->getLat(), $target->getLng());
+
+        return $this->adapter->get($key, function() use ($target) {
             return $this->corona->getResultForCoordinate($target);
         });
     }
