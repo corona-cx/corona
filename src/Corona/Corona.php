@@ -35,7 +35,7 @@ class Corona implements CoronaInterface
             $match = $geofence->contains($target);
 
             if ($match) {
-                return new Result();
+                return FeatureResultConverter::convert($feature);
             }
 
             $iterator->next();
