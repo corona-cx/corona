@@ -25,17 +25,23 @@ class Corona implements CoronaInterface
 
         /** @var Feature $feature */
         while ($feature = $iterator->current()) {
-            $coordList = $feature->getGeometry()->getCoordinates()[0];
+            $areaList = $feature->getGeometry()->getCoordinates();
             $geofence = new Polygon();
 
-            foreach ($coordList as $coord) {
-                $geofence->addPoint(new Coordinate($coord[1], $coord[0]));
-            }
+            foreach ($areaList as $coordList) {
+                if (1 === count($coordList) && 2 !== count($coordList[0])) { // @TODO fix this nested lists
+                    $coordList = array_pop($coordList);
+                }
 
-            $match = $geofence->contains($target);
+                foreach ($coordList as $coord) {
+                    $geofence->addPoint(new Coordinate($coord[1], $coord[0]));
+                }
 
-            if ($match) {
-                return FeatureResultConverter::convert($feature);
+                $match = $geofence->contains($target);
+
+                if ($match) {
+                    return FeatureResultConverter::convert($feature);
+                }
             }
 
             $iterator->next();
