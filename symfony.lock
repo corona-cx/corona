@@ -2,6 +2,12 @@
     "doctrine/inflector": {
         "version": "1.4.3"
     },
+    "jmikola/geojson": {
+        "version": "1.0.2"
+    },
+    "mjaschen/phpgeo": {
+        "version": "3.2.0"
+    },
     "nikic/php-parser": {
         "version": "v4.10.2"
     },
