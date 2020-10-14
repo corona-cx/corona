@@ -10,5 +10,5 @@ use Location\Polygon;
 
 interface CoronaInterface
 {
-    public function getResultForCoordinate(Coordinate $target): Result;
+    public function getResultForCoordinate(Coordinate $target): ?Result;
 }

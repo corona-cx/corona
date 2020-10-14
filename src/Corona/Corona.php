@@ -17,7 +17,7 @@ class Corona implements CoronaInterface
     {
         $this->geoJsonSource = $geoJsonSource;
     }
-    public function getResultForCoordinate(Coordinate $target): Result
+    public function getResultForCoordinate(Coordinate $target): ?Result
     {
         $featureCollection = $this->geoJsonSource->getFeatureCollection();
 
@@ -46,5 +46,7 @@ class Corona implements CoronaInterface
 
             $iterator->next();
         }
+
+        return null;
     }
 }

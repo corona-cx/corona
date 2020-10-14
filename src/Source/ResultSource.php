@@ -24,11 +24,11 @@ class ResultSource
         $this->adapter = new FilesystemAdapter(self::NAMESPACE, self::TTL);
     }
 
-    public function getResultForCoordinate(Coordinate $target): Result
+    public function getResultForCoordinate(Coordinate $target): ?Result
     {
         $key = sprintf('%s_%f_%f', self::KEY_PREFIX, $target->getLat(), $target->getLng());
 
-        return $this->adapter->get($key, function() use ($target) {
+        return $this->adapter->get($key, function() use ($target): ?Result {
             return $this->corona->getResultForCoordinate($target);
         });
     }
