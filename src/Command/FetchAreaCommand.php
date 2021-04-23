@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Command;
 
@@ -42,6 +42,8 @@ class FetchAreaCommand extends Command
         /** @var Feature $feature */
         foreach ($featureCollection as $feature) {
             $featureProperties = $feature->getProperties();
+            $serializedAreaShape = json_encode($feature->getGeometry()->getCoordinates());
+
             $area = new Area();
 
             $area
@@ -52,7 +54,7 @@ class FetchAreaCommand extends Command
                 ->setPopulation($featureProperties['EWZ'])
                 ->setPopulationFederalState($featureProperties['EWZ_BL'])
                 ->setType($featureProperties['BEZ'])
-                ->setShape('test')
+                ->setShape($serializedAreaShape)
             ;
 
             $this

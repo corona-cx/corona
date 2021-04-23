@@ -57,7 +57,7 @@ class Area
     /**
      * @ORM\Column(type="text")
      */
-    private $shape;
+    private ?string $shape = null;
 
     /**
      * @ORM\OneToMany(targetEntity=Data::class, mappedBy="area", orphanRemoval=true)
