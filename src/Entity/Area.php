@@ -42,17 +42,17 @@ class Area
     /**
      * @ORM\Column(type="integer")
      */
-    private $populationFederalState;
+    private ?int $populationFederalState = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $federalState;
+    private ?string $federalState = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $county;
+    private ?string $county = null;
 
     /**
      * @ORM\Column(type="text")
