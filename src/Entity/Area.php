@@ -62,7 +62,17 @@ class Area
     /**
      * @ORM\OneToMany(targetEntity=Data::class, mappedBy="area", orphanRemoval=true)
      */
-    private $data;
+    private Collection $data;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $objectId = null;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $admUnitId = null;
 
     public function __construct()
     {
@@ -196,6 +206,30 @@ class Area
                 $data->setArea(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getObjectId(): ?int
+    {
+        return $this->objectId;
+    }
+
+    public function setObjectId(int $objectId): self
+    {
+        $this->objectId = $objectId;
+
+        return $this;
+    }
+
+    public function getAdmUnitId(): ?int
+    {
+        return $this->admUnitId;
+    }
+
+    public function setAdmUnitId(int $admUnitId): self
+    {
+        $this->admUnitId = $admUnitId;
 
         return $this;
     }

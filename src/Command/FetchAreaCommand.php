@@ -55,6 +55,8 @@ class FetchAreaCommand extends Command
                 ->setPopulationFederalState($featureProperties['EWZ_BL'])
                 ->setType($featureProperties['BEZ'])
                 ->setShape($serializedAreaShape)
+                ->setObjectId($featureProperties['OBJECTID'])
+                ->setAdmUnitId($featureProperties['AdmUnitId'])
             ;
 
             $this
