@@ -35,7 +35,7 @@ class Area
     private ?int $population = null;
 
     /**
-     * @ORM\Column(type="string", length=16)
+     * @ORM\Column(type="string", length=16, nullable=true)
      */
     private ?string $nuts = null;
 
@@ -115,7 +115,7 @@ class Area
         return $this->nuts;
     }
 
-    public function setNuts(string $nuts): self
+    public function setNuts(?string $nuts): self
     {
         $this->nuts = $nuts;
 
