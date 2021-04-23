@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Area;
 use App\Entity\Data;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +18,20 @@ class DataRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Data::class);
+    }
+
+    public function findLatestForArea(Area $area): ?Data
+    {
+        $qb = $this->createQueryBuilder('d');
+
+        $qb
+            ->where($qb->expr()->eq('d.area', ':area'))
+            ->setParameter('area', $area)
+            ->orderBy('d.dateTime', 'DESC')
+            ->setMaxResults(1)
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     // /**
