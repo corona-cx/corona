@@ -6,9 +6,11 @@ use App\Repository\AreaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass=AreaRepository::class)
+ * @JMS\ExclusionPolicy("ALL")
  */
 class Area
 {
@@ -21,36 +23,43 @@ class Area
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @JMS\Expose()
      */
     private ?string $name = null;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @JMS\Expose()
      */
     private ?string $type = null;
 
     /**
      * @ORM\Column(type="integer")
+     * @JMS\Expose()
      */
     private ?int $population = null;
 
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
+     * @JMS\Expose()
      */
     private ?string $nuts = null;
 
     /**
      * @ORM\Column(type="integer")
+     * @JMS\Expose()
      */
     private ?int $populationFederalState = null;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @JMS\Expose()
      */
     private ?string $federalState = null;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @JMS\Expose()
      */
     private ?string $county = null;
 
@@ -66,11 +75,13 @@ class Area
 
     /**
      * @ORM\Column(type="integer")
+     * @JMS\Expose()
      */
     private ?int $objectId = null;
 
     /**
      * @ORM\Column(type="integer")
+     * @JMS\Expose()
      */
     private ?int $admUnitId = null;
 

@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\DataRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass=DataRepository::class)
+ * @JMS\ExclusionPolicy("ALL")
  */
 class Data
 {
@@ -20,71 +22,85 @@ class Data
     /**
      * @ORM\ManyToOne(targetEntity=Area::class, inversedBy="data")
      * @ORM\JoinColumn(nullable=false)
+     * @JMS\Expose()
      */
     private $area;
 
     /**
      * @ORM\Column(type="datetime")
+     * @JMS\Expose()
      */
     private $dateTime;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @JMS\Expose()
      */
     private ?float $deathRate = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @JMS\Expose()
      */
     private ?int $cases = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @JMS\Expose()
      */
     private ?int $deaths = null;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @JMS\Expose()
      */
     private ?float $casesPer100k = null;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @JMS\Expose()
      */
     private ?float $casesPerPopulation = null;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @JMS\Expose()
      */
     private ?float $cases7Per100k = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @JMS\Expose()
      */
     private ?int $recovered = null;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @JMS\Expose()
      */
     private ?float $cases7BlPer100K = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @JMS\Expose()
      */
     private ?int $cases7Bl = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @JMS\Expose()
      */
     private ?int $death7Bl = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @JMS\Expose()
      */
     private ?int $cases7Lk = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @JMS\Expose()
      */
     private ?int $death7Lk = null;
 
