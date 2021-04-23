@@ -1,0 +1,17 @@
+version: "3.1"
+services:
+    mysql:
+      image: mariadb
+      container_name: corona-mysql
+      working_dir: /application
+      volumes:
+        - ./docker/mysql:/var/lib/mysql
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=corona
+        - MYSQL_USER=corona
+        - MYSQL_PASSWORD=corona
+      ports:
+        - "8002:3306"
+      labels:
+        com.symfony.server.service-prefix: 'DATABASE'
