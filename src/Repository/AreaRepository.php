@@ -19,32 +19,15 @@ class AreaRepository extends ServiceEntityRepository
         parent::__construct($registry, Area::class);
     }
 
-    // /**
-    //  * @return Area[] Returns an array of Area objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllIndexedByObjectId(): array
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('a');
 
-    /*
-    public function findOneBySomeField($value): ?Area
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+        $qb
+            ->select('a')
+            ->indexBy('a', 'a.objectId')
         ;
+
+        return $qb->getQuery()->getResult();
     }
-    */
 }
