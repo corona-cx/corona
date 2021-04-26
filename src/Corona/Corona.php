@@ -24,51 +24,66 @@ class Corona implements CoronaInterface
     {
         $client = new Client();
 
+        $body = [
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        'match_all' => new \stdClass(),
+                    ],
+                    'filter' => [
+                        'geo_shape' => [
+                            'shape' => [
+                                'shape' => [
+                                    'type' => 'point',
+                                    'coordinates' => [
+                                        $target->getLng(),
+                                        $target->getLat(),
+                                    ]
+                                ],
+                                'relation' => 'contains',
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
         try {
             $result = $client->get('http://localhost:9200/corona-shape/area_shape/_search', [
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ],
-                'body' => '{
-    "query":{
-        "bool": {
-            "must": {
-                "match_all": {}
-            },
-            "filter": {
-                "geo_shape": {
-                    "shape": {
-                        "shape": {
-                            "type": "point",
-                            "coordinates" : ['.$target->getLng().', '.$target->getLat().']
-                        },
-                        "relation": "contains"
-                    }
-                }
-            }
-        }
-    }
-}',
+                'body' => json_encode($body),
             ]);
         } catch (ClientException $exception) {
-            dd($exception->getResponse()->getBody()->getContents());
+            return null;
         }
 
         $resultObject = json_decode($result->getBody()->getContents());
 
+        if (!$resultObject) {
+            return null;
+        }
+
         $hits = $resultObject->hits->hits;
+
+        if (0 === count($hits)) {
+            return null;
+        }
         $shapeHit = array_pop($hits);
 
         $shapeId = $shapeHit->_id;
 
         /** @var Shape $shape */
         $shape = $this->managerRegistry->getRepository(Shape::class)->find($shapeId);
-        $area = $shape->getArea();
 
+        if (!$shape) {
+            return null;
+        }
+
+        $area = $shape->getArea();
         $data = $this->managerRegistry->getRepository(Data::class)->findLatestForArea($area);
 
         return $data;
-
-        return null;
     }
 }
