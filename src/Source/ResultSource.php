@@ -3,8 +3,7 @@
 namespace App\Source;
 
 use App\Corona\CoronaInterface;
-use App\Model\Result;
-use GeoJson\Feature\FeatureCollection;
+use App\Entity\Data;
 use Location\Coordinate;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -24,11 +23,11 @@ class ResultSource
         $this->adapter = new FilesystemAdapter(self::NAMESPACE, self::TTL);
     }
 
-    public function getResultForCoordinate(Coordinate $target): ?Result
+    public function getResultForCoordinate(Coordinate $target): ?Data
     {
         $key = sprintf('%s_%f_%f', self::KEY_PREFIX, $target->getLat(), $target->getLng());
 
-        return $this->adapter->get($key, function() use ($target): ?Result {
+        return $this->adapter->get($key, function() use ($target): ?Data {
             return $this->corona->getResultForCoordinate($target);
         });
     }
