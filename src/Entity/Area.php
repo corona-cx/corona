@@ -85,9 +85,15 @@ class Area
      */
     private ?int $admUnitId = null;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Shape::class, mappedBy="area")
+     */
+    private $shapes;
+
     public function __construct()
     {
         $this->data = new ArrayCollection();
+        $this->shapes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -241,6 +247,36 @@ class Area
     public function setAdmUnitId(int $admUnitId): self
     {
         $this->admUnitId = $admUnitId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Shape[]
+     */
+    public function getShapes(): Collection
+    {
+        return $this->shapes;
+    }
+
+    public function addShape(Shape $shape): self
+    {
+        if (!$this->shapes->contains($shape)) {
+            $this->shapes[] = $shape;
+            $shape->setArea($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShape(Shape $shape): self
+    {
+        if ($this->shapes->removeElement($shape)) {
+            // set the owning side to null (unless already changed)
+            if ($shape->getArea() === $this) {
+                $shape->setArea(null);
+            }
+        }
 
         return $this;
     }

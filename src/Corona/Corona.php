@@ -4,6 +4,7 @@ namespace App\Corona;
 
 use App\Entity\Area;
 use App\Entity\Data;
+use App\Entity\Shape;
 use Doctrine\Persistence\ManagerRegistry;
 use Location\Coordinate;
 use Location\Polygon;
@@ -19,31 +20,11 @@ class Corona implements CoronaInterface
 
     public function getResultForCoordinate(Coordinate $target): ?Data
     {
-        $areaList = $this->managerRegistry->getRepository(Area::class)->findAll();
-        $targetArea = null;
+        $shapeList = $this->managerRegistry->getRepository(Shape::class)->findAll();
 
-        /** @var Area $area */
-        foreach ($areaList as $area) {
-            $coordList = json_decode($area->getShape());
-
-            if ($this->shapeContains($coordList, $target)) {
-                $targetArea = $area;
-                break;
-            }
-        }
-
-        if ($targetArea) {
-            return $this->managerRegistry->getRepository(Data::class)->findLatestForArea($area);
-        }
-
-        return null;
-    }
-
-    protected function shapeContains(array $coordList, Coordinate $target): bool
-    {
-        $firstElement = $coordList[0];
-
-        if (2 === count($firstElement) && is_float($firstElement[0]) && is_float($firstElement[1])) {
+        /** @var Shape $shape */
+        foreach ($shapeList as $shape) {
+            $coordList = json_decode($shape->getCoordList());
             $geofence = new Polygon();
 
             foreach ($coordList as $coord) {
@@ -51,16 +32,11 @@ class Corona implements CoronaInterface
             }
 
             if ($geofence->contains($target)) {
-                return true;
-            }
-        } else {
-            foreach ($coordList as $subCoordList) {
-                if ($this->shapeContains($subCoordList, $target)) {
-                    return true;
-                }
+                $area = $shape->getArea();
+                return $this->managerRegistry->getRepository(Data::class)->findLatestForArea($area);
             }
         }
 
-        return false;
+        return null;
     }
 }
