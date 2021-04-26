@@ -6,6 +6,8 @@ use App\Entity\Area;
 use App\Entity\Data;
 use App\Entity\Shape;
 use Doctrine\Persistence\ManagerRegistry;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Location\Coordinate;
 use Location\Polygon;
 
@@ -20,23 +22,40 @@ class Corona implements CoronaInterface
 
     public function getResultForCoordinate(Coordinate $target): ?Data
     {
-        $shapeList = $this->managerRegistry->getRepository(Shape::class)->findAll();
+        $client = new Client();
 
-        /** @var Shape $shape */
-        foreach ($shapeList as $shape) {
-            $coordList = json_decode($shape->getCoordList());
-            $geofence = new Polygon();
-
-            foreach ($coordList as $coord) {
-                $geofence->addPoint(new Coordinate($coord[1], $coord[0]));
-            }
-
-            if ($geofence->contains($target)) {
-                $area = $shape->getArea();
-                return $this->managerRegistry->getRepository(Data::class)->findLatestForArea($area);
+        try {
+            $result = $client->get('http://localhost:9200/corona-shape/area_shape/_search', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => '{
+    "query":{
+        "bool": {
+            "must": {
+                "match_all": {}
+            },
+            "filter": {
+                "geo_shape": {
+                    "shape": {
+                        "shape": {
+                            "type": "point",
+                            "coordinates" : [10.0, 53.0]
+                        },
+                        "relation": "contains"
+                    }
+                }
             }
         }
+    }
+}',
+            ]);
+        } catch (ClientException $exception) {
+            dd($exception->getResponse()->getBody()->getContents());
+        }
 
+
+        dd($result->getBody()->getContents());
         return null;
     }
 }
