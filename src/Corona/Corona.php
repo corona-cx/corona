@@ -2,14 +2,12 @@
 
 namespace App\Corona;
 
-use App\Entity\Area;
 use App\Entity\Data;
 use App\Entity\Shape;
 use Doctrine\Persistence\ManagerRegistry;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Location\Coordinate;
-use Location\Polygon;
 
 class Corona implements CoronaInterface
 {
