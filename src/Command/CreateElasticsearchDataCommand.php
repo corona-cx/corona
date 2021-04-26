@@ -37,7 +37,7 @@ class CreateElasticsearchDataCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $client = new Client();
-        
+
         try {
             $client->delete('http://localhost:9200/corona-shape');
 
@@ -71,7 +71,7 @@ class CreateElasticsearchDataCommand extends Command
                 ];
 
 
-                $client->post('http://localhost:9200/corona-shape/area_shape', [
+                $client->post('http://localhost:9200/corona-shape/area_shape/'.$shape->getId(), [
                     'headers' => [
                         'Content-Type' => 'application/json',
                     ],
