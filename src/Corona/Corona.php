@@ -40,7 +40,7 @@ class Corona implements CoronaInterface
                     "shape": {
                         "shape": {
                             "type": "point",
-                            "coordinates" : [10.0, 53.0]
+                            "coordinates" : ['.$target->getLng().', '.$target->getLat().']
                         },
                         "relation": "contains"
                     }
@@ -54,8 +54,21 @@ class Corona implements CoronaInterface
             dd($exception->getResponse()->getBody()->getContents());
         }
 
+        $resultObject = json_decode($result->getBody()->getContents());
 
-        dd($result->getBody()->getContents());
+        $hits = $resultObject->hits->hits;
+        $shapeHit = array_pop($hits);
+
+        $shapeId = $shapeHit->_id;
+
+        /** @var Shape $shape */
+        $shape = $this->managerRegistry->getRepository(Shape::class)->find($shapeId);
+        $area = $shape->getArea();
+
+        $data = $this->managerRegistry->getRepository(Data::class)->findLatestForArea($area);
+
+        return $data;
+
         return null;
     }
 }
